@@ -12,6 +12,7 @@ package com.mycompany.serverclientmonitorsystem;
 public class ServerClientMonitorSystem {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+         ConnectPage cts = new ConnectPage();
+         cts.setVisible(true);
     }
 }
