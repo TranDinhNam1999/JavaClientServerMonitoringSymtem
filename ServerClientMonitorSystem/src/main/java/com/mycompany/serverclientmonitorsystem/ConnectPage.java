@@ -4,6 +4,12 @@
  */
 package com.mycompany.serverclientmonitorsystem;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author namha
@@ -58,6 +64,11 @@ public class ConnectPage extends javax.swing.JFrame {
         jLabel2.setText("Input port");
 
         jButton1.setText("Start");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,6 +117,13 @@ public class ConnectPage extends javax.swing.JFrame {
             evt.consume();
         }       // TODO add your handling code here:
     }//GEN-LAST:event_jTextportKeyTyped
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int Port = Integer.parseInt(jTextport.getText()); // TODO add your handling code here:
+        setVisible(false);
+        Dashboard of = new Dashboard(Port);
+        of.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

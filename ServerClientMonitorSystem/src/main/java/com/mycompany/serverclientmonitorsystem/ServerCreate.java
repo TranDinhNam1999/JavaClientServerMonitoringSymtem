@@ -37,7 +37,7 @@ public class ServerCreate implements Runnable {
         nomeUsuario = new Vector<String>(); // contém usuários
         map = new HashMap<String, Socket>(); // name to socket one on one map
 
-        System.out.println("Servidor iniciado!");
+        System.out.println("Máy chủ đã khởi động!");
 
         try {
             ss = new ServerSocket(porta);
@@ -52,7 +52,7 @@ public class ServerCreate implements Runnable {
                 new Thread(new ServiceReceive(s, listaUsuario, nomeUsuario, map)).start();
             } catch (IOException e) {
                 Dashboard cts = new Dashboard();
-                JOptionPane.showMessageDialog(cts, "Servidor encerrado！");
+                JOptionPane.showMessageDialog(cts, "Server error！");
             }
         }
     }

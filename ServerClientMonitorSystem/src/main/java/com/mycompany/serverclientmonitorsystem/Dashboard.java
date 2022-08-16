@@ -4,7 +4,11 @@
  */
 package com.mycompany.serverclientmonitorsystem;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Vector;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,6 +23,25 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
     }
 
+    public Dashboard(int port) {
+        initComponents();
+        if (ServerCreate.ss != null && !ServerCreate.ss.isClosed()) {
+                    JOptionPane.showMessageDialog(this,"Máy chủ đã khởi động!");
+                } else {
+                    if (port != 0) {
+                        try {
+                            ServerCreate.flag = true;
+                            new Thread(new ServerCreate(port)).start();
+                            String Ip = InetAddress.getLocalHost().getHostAddress();
+                            labelip.setText(Ip);
+                            labelport.setText(String.valueOf(port));
+                        } catch (IOException e1) {
+                            JOptionPane.showMessageDialog(this, "không chạy được");
+                        }
+                    }
+                }        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

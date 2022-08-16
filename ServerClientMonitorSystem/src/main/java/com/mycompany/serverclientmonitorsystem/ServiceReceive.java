@@ -31,10 +31,13 @@ public class ServiceReceive implements Runnable {
         this.map = map;
     }
     
+    @Override
     public void run() {
         try {
             BufferedReader brIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Dashboard cts = new Dashboard();
+            cts.setVisible(true);
+            
             while (true) {
                 String s = brIn.readLine();
                 String[] strs = s.split(",,");
