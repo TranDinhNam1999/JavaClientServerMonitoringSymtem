@@ -79,7 +79,7 @@ public class Main {
                 String name = jtextname.getText();
 
                 if (port > 0 && port < 10000 && ip.length() != 0 && name.length() != 0) {
-                    ClientHandler win = new ClientHandler(ip,port,name);
+                    ClientHandler win = new ClientHandler(ip, port, name);
                     win.window.setVisible(true);
                     window.setVisible(false);
                     window.dispose();
@@ -88,7 +88,7 @@ public class Main {
                 }
             }
         });
-        
+
         jtextport.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();

@@ -17,6 +17,7 @@ public class Main {
     public static int port;
     public static JTextField jtextport;
     public static JButton jbutton;
+    public static JTable jtable;
 
     public static void main(String[] args) {
         new Main();

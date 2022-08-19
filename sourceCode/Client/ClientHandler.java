@@ -4,23 +4,26 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.Socket;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 public class ClientHandler {
     public static JFrame window;
     public static JButton connect;
-    public static JTextArea textMessage;
+    public static JTable jtable;
     public static Socket socket = null;
     public static JList<String> user;
     public static String nameClient = "Client";
+    public static DefaultTableModel jobsModel;
+    public static String pathDirectory = "D:\\HOCTAP\\HOCLAI";
 
+    String globalId;
+    int globalPort;
     JLabel labelip, labelport;
     JTextField nomeUsuario, porta, message, msgPriv;
     JButton msgPrivada, enviar;
@@ -33,6 +36,8 @@ public class ClientHandler {
             try {
                 socket = new Socket(ip, port);
                 nameClient = name;
+                globalId = ip;
+                globalPort = port;
                 new ClientSend(socket, name, "2", "");
                 new Thread(new ClientReceive(socket)).start();
 
@@ -41,13 +46,14 @@ public class ClientHandler {
             }
         }
         init(ip, port, name);
+        new Thread(new WatchFolder()).start();
     }
 
     public void init(String ip, int port, String name) {
         window = new JFrame("Client monitoring");
         window.setLayout(null);
-        window.setBounds(400, 400, 550, 480);
-        window.setResizable(false);
+        window.setBounds(400, 400, 1200, 480);
+        window.setResizable(true);
 
         JLabel label_ip = new JLabel("Ip:");
         label_ip.setBounds(10, 28, 70, 30);
@@ -70,57 +76,32 @@ public class ClientHandler {
         window.add(labelname);
 
         connect = new JButton("Disconnect");
-        connect.setBounds(400, 28, 100, 30);
+        connect.setBounds(400, 28, 150, 30);
         window.add(connect);
 
-        textMessage = new JTextArea(" ");
-        textMessage.setBounds(10, 70, 340, 220);
-        textMessage.setEditable(false);
-
-        textMessage.setLineWrap(true);
-        textMessage.setWrapStyleWord(true);
-
         JLabel label_text = new JLabel("Thông tin logs");
-        label_text.setBounds(100, 58, 200, 50);
+        label_text.setBounds(10, 58, 200, 50);
         window.add(label_text);
 
-        JScrollPane paneText = new JScrollPane(textMessage);
-        paneText.setBounds(10, 90, 360, 240);
-        window.add(paneText);
+        jobsModel = new DefaultTableModel(
+                new String[] { "STT", "Monitoring directory", "Time", "Action", "Name Client", "Description" }, 0);
 
-        JLabel label_listaUsuario = new JLabel("Danh sách người dùng");
-        label_listaUsuario.setBounds(380, 58, 200, 50);
-        window.add(label_listaUsuario);
+        jtable = new JTable();
+        // Initializing the JTable
+        jtable.setModel(jobsModel);
+        jtable.setBounds(10, 90, 1160, 300);
 
-        user = new JList<String>();
-        JScrollPane paneUser = new JScrollPane(user);
-        paneUser.setBounds(375, 90, 140, 240);
-        window.add(paneUser);
-
-        JLabel label_Alerta = new JLabel("Nhập messasge cho nhóm");
-        label_Alerta.setBounds(10, 320, 180, 50);
-        window.add(label_Alerta);
-
-        message = new JTextField();
-        message.setBounds(10, 355, 188, 30);
-        message.setText(null);
-        window.add(message);
-
-        JLabel label_Aviso = new JLabel("Thêm người dùng cho tin nhắn riêng tư");
-        label_Aviso.setBounds(272, 320, 250, 50);
-        window.add(label_Aviso);
-
-        msgPriv = new JTextField();
-        msgPriv.setBounds(272, 355, 100, 30);
-        window.add(msgPriv);
-
-        msgPrivada = new JButton("Msg Privada");
-        msgPrivada.setBounds(376, 355, 140, 30);
-        window.add(msgPrivada);
-
-        enviar = new JButton("Grupo");
-        enviar.setBounds(190, 355, 77, 30);
-        window.add(enviar);
+        TableColumnModel columnModel = jtable.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(20);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(100);
+        columnModel.getColumn(3).setPreferredWidth(100);
+        columnModel.getColumn(4).setPreferredWidth(100);
+        columnModel.getColumn(5).setPreferredWidth(400);
+        // adding it to JScrollPane
+        JScrollPane sp = new JScrollPane(jtable);
+        sp.setBounds(10, 90, 1160, 300);
+        window.add(sp);
 
         myEvent(); // add conectados/ouvindo a porta
         window.setVisible(true);
@@ -132,6 +113,7 @@ public class ClientHandler {
                 if (socket != null && socket.isConnected()) {
                     try {
                         new ClientSend(socket, nameClient, "3", "");
+                        WatchFolder.watchService.close();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -143,99 +125,39 @@ public class ClientHandler {
         connect.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (socket == null) {
-                    JOptionPane.showMessageDialog(window, "Kết nối đã đóng!");
+                    try {
+                        socket = new Socket(globalId, globalPort);
+                        connect.setText("Đóng kết nối");
+                        new ClientSend(socket, getnomeUsuario(), "2", "");
+                        new Thread(new ClientReceive(socket)).start();
+                        new Thread(new WatchFolder()).start();
+                    } catch (Exception e2) {
+                        JOptionPane.showMessageDialog(window, "Không kết nối được, kiểm tra ip và cổng");
+                    }
                 } else if (socket != null && socket.isConnected()) {
                     try {
                         new ClientSend(socket, getnomeUsuario(), "3", "");
-                        connect.setText("Entrar");
-                        connect.setText("saiu!");
+                        connect.setText("Kết nối lại");
+                        WatchFolder.watchService.close();
                         socket.close();
                         socket = null;
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date date = new Date();
+                        jobsModel.addRow(
+                                new Object[] { jobsModel.getRowCount() + 1, pathDirectory,
+                                        dateFormat.format(date), "Disconnected",
+                                        nameClient,
+                                        "(Thông báo) " + nameClient + " đã ngắt kết nối với server!" });
+                        jtable.setModel(jobsModel);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 }
             }
         });
-
-        connect.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (socket != null && socket.isConnected()) {
-                    JOptionPane.showMessageDialog(window, "Conectado!");
-                } else {
-                    String ipString = "127.0.0.1";
-                    String portaClinet = porta.getText();
-                    String name = nomeUsuario.getText();
-
-                    if ("".equals(name) || "".equals(portaClinet)) {
-                        JOptionPane.showMessageDialog(window, "O usuário ou a portaa não podem estar vazios!");
-                    } else {
-                        try {
-                            int portas = Integer.parseInt(portaClinet);
-                            socket = new Socket(ipString, portas);
-                            connect.setText("Entrou");
-                            connect.setText("sair");
-                            new ClientSend(socket, getnomeUsuario(), "2", "");
-                            new Thread(new ClientReceive(socket)).start();
-                        } catch (Exception e2) {
-                            JOptionPane.showMessageDialog(window, "falha em conectar-se, verifique o ip e a portaa");
-                        }
-                    }
-                }
-            }
-        });
-
-        msgPrivada.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                enviarMsgmsgPriv();
-            }
-        });
-
-        enviar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                enviarMsg();
-            }
-        });
-    }
-
-    public void enviarMsg() {
-        String messages = message.getText();
-        if ("".equals(messages)) {
-            JOptionPane.showMessageDialog(window, "Não há nada para enviar");
-        } else if (socket == null || !socket.isConnected()) {
-            JOptionPane.showMessageDialog(window, "Sem conexão");
-        } else {
-            try {
-                new ClientSend(socket, getnomeUsuario() + ": " + messages, "1", "");
-                message.setText(null);
-            } catch (IOException e1) {
-                JOptionPane.showMessageDialog(window, "falha ao enviar!");
-            }
-        }
-    }
-
-    public void enviarMsgmsgPriv() {
-        String messages = message.getText();
-        if ("".equals(messages)) {
-            JOptionPane.showMessageDialog(window, "Não há nada para enviar!");
-        } else if (socket == null || !socket.isConnected()) {
-            JOptionPane.showMessageDialog(window, "Sem conexão");
-        } else {
-            try {
-                new ClientSend(socket, getnomeUsuario() + ": " + messages, "4", getmsgPrivada());
-                ClientHandler.textMessage.append(getnomeUsuario() + ": " + messages + "\r\n");
-                message.setText(null);
-            } catch (IOException e1) {
-                JOptionPane.showMessageDialog(window, "Mensagem privada não enviado!");
-            }
-        }
     }
 
     String getnomeUsuario() {
         return nameClient;
-    }
-
-    public String getmsgPrivada() {
-        return msgPriv.getText();
     }
 }

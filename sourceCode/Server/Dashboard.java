@@ -3,6 +3,8 @@ package Server;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.awt.event.ActionListener;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,6 +15,7 @@ public class Dashboard {
     public static JFrame window;
     public static JTextArea console;
     public static JList<String> user;
+    public static String address;
 
     public JButton disconec;
     public JTextField message;
@@ -31,6 +34,7 @@ public class Dashboard {
             if (port != 0) {
                 try {
                     Serverhandler.flag = true;
+                    address = InetAddress.getLocalHost().getHostAddress();
                     new Thread(new Serverhandler(port)).start();
                 } catch (IOException e1) {
                     JOptionPane.showMessageDialog(window, "Cannot start server");
@@ -52,8 +56,8 @@ public class Dashboard {
         labelnomeServidor.setBounds(10, 8, 80, 30);
         window.add(labelnomeServidor);
 
-        jport = new JLabel(String.valueOf(port));
-        jport.setBounds(80, 8, 60, 30);
+        jport = new JLabel(String.valueOf(address));
+        jport.setBounds(30, 8, 100, 30);
         window.add(jport);
 
         JLabel label_porta = new JLabel("Port:");
@@ -72,7 +76,7 @@ public class Dashboard {
         console.setWrapStyleWord(true);
 
         JLabel label_text = new JLabel("Logs");
-        label_text.setBounds(100, 47, 190, 30);
+        label_text.setBounds(10, 47, 190, 30);
         window.add(label_text);
 
         JScrollPane paneText = new JScrollPane(console);
@@ -92,11 +96,11 @@ public class Dashboard {
         message.setBounds(0, 0, 0, 0);
         window.add(message);
 
-        disconec = new JButton("Enviar");
+        disconec = new JButton("Disconnect");
         disconec.setBounds(0, 0, 0, 0);
         window.add(disconec);
 
-        myEvent(); // add listeners
+        myEvent();
         window.setVisible(true);
     }
 
@@ -117,7 +121,7 @@ public class Dashboard {
         disconec.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (Serverhandler.ss == null || Serverhandler.ss.isClosed()) {
-                    JOptionPane.showMessageDialog(window, "May chu da dong!");
+                    JOptionPane.showMessageDialog(window, "Máy chủ đã đóng!");
                 } else {
                     if (Serverhandler.listaClient != null && Serverhandler.listaClient.size() != 0) {
                         try {
@@ -127,7 +131,7 @@ public class Dashboard {
                         }
                     }
                     try {
-                        disconec.setText("Dong");
+                        disconec.setText("Đóng");
                         Serverhandler.ss.close();
                         Serverhandler.ss = null;
                         Serverhandler.listaClient = null;
