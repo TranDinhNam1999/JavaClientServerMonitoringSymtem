@@ -28,10 +28,10 @@ public class Serverhandler implements Runnable {
         nameClient = new Vector<String>();
         map = new HashMap<String, Socket>(); // name to socket one on one map
 
-        System.out.println("May chu da khoi dong!");
-
+        System.out.println("Máy chủ đã khởi động!");
         try {
             ss = new ServerSocket(porta);
+            System.out.println(ss.getLocalSocketAddress());
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -42,7 +42,7 @@ public class Serverhandler implements Runnable {
                 listaClient.add(s);
                 new Thread(new ServerReceive(s, listaClient, nameClient, map)).start();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(Dashboard.window, "Dong may chu！");
+                JOptionPane.showMessageDialog(Dashboard.window, "Đóng máy chủ！");
             }
         }
     }

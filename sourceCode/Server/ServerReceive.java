@@ -35,25 +35,25 @@ public class ServerReceive implements Runnable {
                     name = strs[2];
 
                 if (info.equals("1")) { // 1 para Nova requisição de mensagem
-                    Dashboard.console.append("Tin nhan moi ---->> " + line + "\r\n");
+                    Dashboard.console.append("Tin nhắn mới ---->> " + line + "\r\n");
                     Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
                     new ServerSend(listClient, line, "1", "");
                 } else if (info.equals("2")) { // 2 para login
                     if (!nameClient.contains(line)) {
-                        Dashboard.console.append("Client moi da ket noi ---->> " + line + "\r\n");
+                        Dashboard.console.append("Client mới đã kết nối ---->> " + line + "\r\n");
                         Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
                         nameClient.add(line);
                         map.put(line, socket);
                         Dashboard.user.setListData(nameClient);
                         new ServerSend(listClient, name, "2", line);
                     } else {
-                        Dashboard.console.append("Client dang nhap trung ten ---->> " + line + "\r\n");
+                        Dashboard.console.append("Client đăng nhập trùng tên ---->> " + line + "\r\n");
                         Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
                         listClient.remove(socket);
                         new ServerSend(socket, "", "4");
                     }
                 } else if (info.equals("3")) { // 3 para sair
-                    Dashboard.console.append("Da thoat ---->> " + line + "\r\n");
+                    Dashboard.console.append("Đã thoát ---->> " + line + "\r\n");
                     Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
                     nameClient.remove(line);
                     listClient.remove(socket);
@@ -63,7 +63,7 @@ public class ServerReceive implements Runnable {
                     socket.close();
                     break; // quebra de info
                 } else if (info.equals("4")) { // 4 para msg privada
-                    Dashboard.console.append("Tin nhan moi ---->> " + line + "\r\n");
+                    Dashboard.console.append("Tin nhắn mới ---->> " + line + "\r\n");
                     Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
                     if (map.containsKey(name))
                         new ServerSend(map.get(name), line, "6");

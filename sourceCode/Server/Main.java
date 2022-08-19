@@ -61,7 +61,7 @@ public class Main {
                     window.setVisible(false);
                     window.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(window, "Port khong hop le!!");
+                    JOptionPane.showMessageDialog(window, "Thông tin không hợp lệ!!");
                 }
             }
         });
