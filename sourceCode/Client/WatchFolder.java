@@ -47,12 +47,22 @@ public class WatchFolder implements Runnable {
                     if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Date date = new Date();
-                        ClientHandler.jobsModel.addRow(
-                                new Object[] { ClientHandler.jobsModel.getRowCount() + 1, ClientHandler.pathDirectory,
-                                        dateFormat.format(date), "Created",
-                                        ClientHandler.nameClient,
-                                        "A new file is created : " + fileName });
+                        Object[] obj = new Object[] { ClientHandler.jobsModel.getRowCount() + 1,
+                                ClientHandler.pathDirectory,
+                                dateFormat.format(date), "Created",
+                                ClientHandler.nameClient,
+                                "A new file is created : " + fileName };
+
+                        String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
+                                + ClientHandler.pathDirectory + "," +
+                                dateFormat.format(date).toString() + "," + "Created" + "," +
+                                ClientHandler.nameClient + "," +
+                                "A new file is created : " + fileName + "}";
+
+                        ClientHandler.jobsModel.addRow(obj);
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
+                        WriteFile wr = new WriteFile();
+                        wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
                     }
 
                     if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
@@ -60,25 +70,45 @@ public class WatchFolder implements Runnable {
                         System.out.println("A file has been deleted: " + fileName);
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Date date = new Date();
-                        ClientHandler.jobsModel.addRow(
-                                new Object[] { ClientHandler.jobsModel.getRowCount() + 1, ClientHandler.pathDirectory,
-                                        dateFormat.format(date), "Deleted",
-                                        ClientHandler.nameClient,
-                                        "A file has been deleted : " + fileName });
-                        ClientHandler.jtable.setModel(ClientHandler.jobsModel);
 
+                        Object[] obj = new Object[] { ClientHandler.jobsModel.getRowCount() + 1,
+                                ClientHandler.pathDirectory,
+                                dateFormat.format(date), "Deleted",
+                                ClientHandler.nameClient,
+                                "A file has been deleted : " + fileName };
+
+                        String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
+                                + ClientHandler.pathDirectory + "," +
+                                dateFormat.format(date).toString() + "," + "Deleted" + "," +
+                                ClientHandler.nameClient + "," +
+                                "A file has been deleted : " + fileName + "}";
+
+                        ClientHandler.jobsModel.addRow(obj);
+                        ClientHandler.jtable.setModel(ClientHandler.jobsModel);
+                        WriteFile wr = new WriteFile();
+                        wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
                     }
                     if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
 
                         System.out.println("A file has been modified: " + fileName);
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Date date = new Date();
-                        ClientHandler.jobsModel.addRow(
-                                new Object[] { ClientHandler.jobsModel.getRowCount() + 1, ClientHandler.pathDirectory,
-                                        dateFormat.format(date), "Modified",
-                                        ClientHandler.nameClient,
-                                        "A file has been modified : " + fileName });
+                        Object[] obj = new Object[] { ClientHandler.jobsModel.getRowCount() + 1,
+                                ClientHandler.pathDirectory,
+                                dateFormat.format(date), "Modified",
+                                ClientHandler.nameClient,
+                                "A file has been modified : " + fileName };
+
+                        String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
+                                + ClientHandler.pathDirectory + "," +
+                                dateFormat.format(date).toString() + "," + "Modified" + "," +
+                                ClientHandler.nameClient + "," +
+                                "A file has been modified : " + fileName + "}";
+
+                        ClientHandler.jobsModel.addRow(obj);
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
+                        WriteFile wr = new WriteFile();
+                        wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
                     }
 
                 }

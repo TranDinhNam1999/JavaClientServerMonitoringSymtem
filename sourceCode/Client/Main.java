@@ -84,7 +84,7 @@ public class Main {
                     window.setVisible(false);
                     window.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(window, "Thông tin không hợp lệ !!");
+                    JOptionPane.showMessageDialog(window, "Invalid information!!");
                 }
             }
         });

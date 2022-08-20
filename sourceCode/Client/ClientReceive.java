@@ -34,43 +34,64 @@ public class ClientReceive implements Runnable {
                     if (info.equals("2")) {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Date date = new Date();
+
+                        Object[] obj = new Object[] { ClientHandler.jobsModel.getRowCount() + 1,
+                                ClientHandler.pathDirectory,
+                                dateFormat.format(date), "Connected",
+                                ClientHandler.nameClient,
+                                "(Thông báo) " + ClientHandler.nameClient + " connected to server!" };
+
+                        String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
+                                + ClientHandler.pathDirectory + "," +
+                                dateFormat.format(date).toString() + "," + "Connected" + "," +
+                                ClientHandler.nameClient + "," +
+                                "(Notification) " + ClientHandler.nameClient + " connected to server!" + "}";
+
                         ClientHandler.jobsModel.addRow(
-                                new Object[] { ClientHandler.jobsModel.getRowCount() + 1, ClientHandler.pathDirectory,
-                                        dateFormat.format(date), "Connected",
-                                        ClientHandler.nameClient,
-                                        "(Thông báo) " + ClientHandler.nameClient + " kết nối tới server!" });
+                                obj);
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
+                        WriteFile wr = new WriteFile();
+                        wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
                     } else {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Date date = new Date();
+
+                        Object[] obj = new Object[] { ClientHandler.jobsModel.getRowCount() + 1,
+                                ClientHandler.pathDirectory,
+                                dateFormat.format(date), "Disconnected",
+                                ClientHandler.nameClient,
+                                "(Thông báo) " + ClientHandler.nameClient + " disconnected to server!" };
+
+                        String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
+                                + ClientHandler.pathDirectory + "," +
+                                dateFormat.format(date).toString() + "," + "Disconnected" + "," +
+                                ClientHandler.nameClient + "," +
+                                "(Notification) " + ClientHandler.nameClient + " disconnected to server!" + "}";
+
                         ClientHandler.jobsModel.addRow(
-                                new Object[] { ClientHandler.jobsModel.getRowCount() + 1, ClientHandler.pathDirectory,
-                                        dateFormat.format(date), "Disconnected",
-                                        ClientHandler.nameClient,
-                                        "(Thông báo) " + ClientHandler.nameClient + " đã ngắt kết nối tới server!" });
+                                obj);
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
+                        WriteFile wr = new WriteFile();
+                        wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
                     }
                     String list = line.substring(1, line.length() - 1);
                     String[] data = list.split(",");
                     ClientHandler.user.clearSelection();
                     ClientHandler.user.setListData(data);
                 } else if (info.equals("4")) {
-                    ClientHandler.connect.setText("đăng nhập");
+                    ClientHandler.connect.setText("Log-in");
                     ClientHandler.socket.close();
                     ClientHandler.socket = null;
-                    JOptionPane.showMessageDialog(ClientHandler.window, "Ai đó đã sử dụng tên người dùng này");
+                    JOptionPane.showMessageDialog(ClientHandler.window, "Someone used this username!!!");
                     break;
                 } else if (info.equals("5")) {
-                    ClientHandler.connect.setText("đã vào");
-                    ClientHandler.socket.close();
-                    ClientHandler.socket = null;
                     break;
-                } else if (info.equals("7")) {
-                    JOptionPane.showMessageDialog(ClientHandler.window, "Người dùng này không trực tuyến");
+                } else if (info.equals("6")) {
+                    break;
                 }
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(ClientHandler.window, "Người dùng này đã rời đi");
+            JOptionPane.showMessageDialog(ClientHandler.window, "This user has left!!!");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
