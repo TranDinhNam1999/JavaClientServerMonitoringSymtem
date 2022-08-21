@@ -17,11 +17,9 @@ import java.util.Date;
 import java.util.Scanner;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class ClientHandler {
@@ -29,7 +27,6 @@ public class ClientHandler {
     public static JButton connect;
     public static JTable jtable;
     public static Socket socket = null;
-    public static JList<String> user;
     public static String nameClient = "Client";
     public static DefaultTableModel jobsModel;
     public static String pathDirectory = "D:\\HOCTAP\\HOCLAI";
@@ -39,8 +36,7 @@ public class ClientHandler {
     JLabel labelPath;
     JTextField textIp, textPort;
     JTextField jtf;
-    JButton msgPrivada, enviar, btnbrowse, btnLoadLogs;
-    TableRowSorter sorter;
+    JButton msgPrivada, enviar, btnbrowse, btnLoadLogs, btnSearch;
 
     public ClientHandler(String ip, int port, String name) {
 
@@ -52,7 +48,7 @@ public class ClientHandler {
                 nameClient = name;
                 globalId = ip;
                 globalPort = port;
-                new ClientSend(socket, name, "2", "");
+                new ClientSend(socket, name, "2", "Connected", pathDirectory);
                 new Thread(new ClientReceive(socket)).start();
 
             } catch (Exception e2) {
@@ -60,7 +56,7 @@ public class ClientHandler {
             }
         }
         init(ip, port, name);
-        new Thread(new WatchFolder()).start();
+        new Thread(new WatchFolder(socket)).start();
     }
 
     public void init(String ip, int port, String name) {
@@ -101,25 +97,40 @@ public class ClientHandler {
         btnbrowse.setBounds(1050, 28, 100, 30);
         window.add(btnbrowse);
 
-        JLabel label_text = new JLabel("Search");
-        label_text.setBounds(10, 80, 50, 30);
-        window.add(label_text);
+        btnSearch = new JButton("Search");
+        btnSearch.setBounds(400, 80, 150, 30);
+        window.add(btnSearch);
 
         jtf = new JTextField("");
-        jtf.setBounds(80, 80, 300, 30);
+        jtf.setBounds(10, 80, 380, 30);
         window.add(jtf);
 
         btnLoadLogs = new JButton("Load Logs");
         btnLoadLogs.setBounds(1050, 80, 100, 30);
         window.add(btnLoadLogs);
 
+        // jobsModel = new DefaultTableModel(
+        // new String[] { "STT", "Monitoring directory", "Time", "Action", "Name
+        // Client", "Description" }, 0);
+
         jobsModel = new DefaultTableModel(
-                new String[] { "STT", "Monitoring directory", "Time", "Action", "Name Client", "Description" }, 0);
+                new String[] { "STT", "Monitoring directory", "Time", "Action", "Name Client", "Description" }, 0) {
+            public Class getColumnClass(int column) {
+                Class returnValue;
+                if ((column >= 0) && (column < getColumnCount())) {
+                    returnValue = getValueAt(0, column).getClass();
+                } else {
+                    returnValue = Object.class;
+                }
+                return returnValue;
+            }
+        };
 
         jtable = new JTable();
-        // Initializing the JTable
         jtable.setModel(jobsModel);
         jtable.setAutoCreateRowSorter(true);
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(jobsModel);
+        jtable.setRowSorter(sorter);
         jtable.setBounds(10, 120, 1160, 300);
 
         TableColumnModel columnModel = jtable.getColumnModel();
@@ -134,7 +145,18 @@ public class ClientHandler {
         sp.setBounds(10, 120, 1160, 300);
         window.add(sp);
 
-        myEvent(); // add conectados/ouvindo a porta
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String text = jtf.getText();
+                if (text.length() == 0) {
+                    sorter.setRowFilter(null);
+                } else {
+                    sorter.setRowFilter(RowFilter.regexFilter(text));
+                }
+            }
+        });
+
+        myEvent();
         window.setVisible(true);
     }
 
@@ -186,7 +208,7 @@ public class ClientHandler {
             public void windowClosing(WindowEvent e) {
                 if (socket != null && socket.isConnected()) {
                     try {
-                        new ClientSend(socket, nameClient, "3", "");
+                        new ClientSend(socket, nameClient, "3", "Disconnected", pathDirectory);
                         WatchFolder.watchService.close();
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -195,36 +217,6 @@ public class ClientHandler {
                 System.exit(0);
             }
         });
-
-        jtf.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                String value = jtf.getText();
-
-                for (int row = 0; row <= jtable.getRowCount() - 1; row++) {
-
-                    for (int col = 0; col <= jtable.getColumnCount() - 1; col++) {
-
-                        if (value.equals(jtable.getValueAt(row, col))) {
-
-                            // this will automatically set the view of the scroll in the location of the
-                            // value
-                            jtable.scrollRectToVisible(jtable.getCellRect(row, 0, true));
-
-                            // this will automatically set the focus of the searched/selected row/value
-                            jtable.setRowSelectionInterval(row, row);
-
-                            for (int i = 0; i <= jtable.getColumnCount() - 1; i++) {
-
-                                jtable.getColumnModel().getColumn(i);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
         btnbrowse.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -239,7 +231,7 @@ public class ClientHandler {
                     labelPath.setText("Path: " + pathDirectory);
                     try {
                         WatchFolder.watchService.close();
-                        new Thread(new WatchFolder()).start();
+                        new Thread(new WatchFolder(socket)).start();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -273,9 +265,9 @@ public class ClientHandler {
                         socket = new Socket(globalId, globalPort);
                         connect.setText("Connected");
 
-                        new ClientSend(socket, getnomeUsuario(), "2", "");
+                        new ClientSend(socket, getnomeUsuario(), "2", "Connected", pathDirectory);
                         new Thread(new ClientReceive(socket)).start();
-                        new Thread(new WatchFolder()).start();
+                        new Thread(new WatchFolder(socket)).start();
 
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         Date date = new Date();
@@ -283,7 +275,7 @@ public class ClientHandler {
                         Object[] obj = new Object[] { jobsModel.getRowCount() + 1, pathDirectory,
                                 dateFormat.format(date), "Disconnected",
                                 nameClient,
-                                "(Thông báo) " + nameClient + " connected to server!" };
+                                "(Notification) " + nameClient + " connected to server!" };
 
                         String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
                                 + ClientHandler.pathDirectory + "," +
@@ -300,7 +292,7 @@ public class ClientHandler {
                     }
                 } else if (socket != null && socket.isConnected()) {
                     try {
-                        new ClientSend(socket, getnomeUsuario(), "3", "");
+                        new ClientSend(socket, getnomeUsuario(), "3", "Disconnected", pathDirectory);
                         connect.setText("Disconnect");
                         WatchFolder.watchService.close();
                         socket.close();
@@ -311,7 +303,7 @@ public class ClientHandler {
                         Object[] obj = new Object[] { jobsModel.getRowCount() + 1, pathDirectory,
                                 dateFormat.format(date), "Disconnected",
                                 nameClient,
-                                "(Thông báo) " + nameClient + " disconnected to server!" };
+                                "(Notification) " + nameClient + " disconnected to server!" };
 
                         String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
                                 + ClientHandler.pathDirectory + "," +

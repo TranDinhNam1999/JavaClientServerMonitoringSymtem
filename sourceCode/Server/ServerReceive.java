@@ -7,6 +7,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Vector;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ServerReceive implements Runnable {
     private Socket socket;
@@ -28,33 +31,62 @@ public class ServerReceive implements Runnable {
             while (true) {
                 String s = brIn.readLine();
                 String[] strs = s.split(",,");
-                String info = strs[0]; // judge the kind of info
-                String line = strs[1];
-                String name = "";
-                if (strs.length == 3)
-                    name = strs[2];
+                String info = strs[0]; // numbet
+                String line = strs[1]; // name client
+                String name = strs[2]; // message
+                String path = strs[3]; // path
 
-                if (info.equals("1")) { // 1 para Nova requisição de mensagem
-                    Dashboard.console.append("Tin nhắn mới ---->> " + line + "\r\n");
-                    Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
+                if (info.equals("1")) {
                     new ServerSend(listClient, line, "1", "");
                 } else if (info.equals("2")) { // 2 para login
                     if (!nameClient.contains(line)) {
-                        Dashboard.console.append("Client mới đã kết nối ---->> " + line + "\r\n");
-                        Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
                         nameClient.add(line);
                         map.put(line, socket);
                         Dashboard.user.setListData(nameClient);
                         new ServerSend(listClient, name, "2", line);
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date date = new Date();
+
+                        Object[] obj = new Object[] { Dashboard.jobsModel.getRowCount() + 1, path,
+                                dateFormat.format(date), "Connected",
+                                line,
+                                name };
+
+                        String data = "{" + (Dashboard.jobsModel.getRowCount() + 1) + ","
+                                + path + "," +
+                                dateFormat.format(date).toString() + "," + "Connected" + "," +
+                                line + "," +
+                                name + "}";
+
+                        WriteFile wr = new WriteFile();
+                        wr.writeFile(String.valueOf(data), Dashboard.pathDirectory);
+                        Dashboard.jobsModel.addRow(obj);
+                        Dashboard.jtable.setModel(Dashboard.jobsModel);
                     } else {
-                        Dashboard.console.append("Client đăng nhập trùng tên ---->> " + line + "\r\n");
-                        Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
                         listClient.remove(socket);
                         new ServerSend(socket, "", "4");
                     }
-                } else if (info.equals("3")) { // 3 para sair
-                    Dashboard.console.append("Đã thoát ---->> " + line + "\r\n");
-                    Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
+                } else if (info.equals("3")) {
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+
+                    Object[] obj = new Object[] { Dashboard.jobsModel.getRowCount() + 1, path,
+                            dateFormat.format(date), "Disconnected",
+                            line,
+                            name };
+
+                    String data = "{" + (Dashboard.jobsModel.getRowCount() + 1) + ","
+                            + path + "," +
+                            dateFormat.format(date).toString() + "," + "Disconnected" + "," +
+                            line + "," +
+                            name + "}";
+
+                    WriteFile wr = new WriteFile();
+                    wr.writeFile(String.valueOf(data), Dashboard.pathDirectory);
+                    Dashboard.jobsModel.addRow(obj);
+                    Dashboard.jtable.setModel(Dashboard.jobsModel);
+
                     nameClient.remove(line);
                     listClient.remove(socket);
                     map.remove(line);
@@ -62,13 +94,67 @@ public class ServerReceive implements Runnable {
                     new ServerSend(listClient, nameClient, "3", line);
                     socket.close();
                     break; // quebra de info
-                } else if (info.equals("4")) { // 4 para msg privada
-                    Dashboard.console.append("Tin nhắn mới ---->> " + line + "\r\n");
-                    Dashboard.console.setCaretPosition(Dashboard.console.getText().length());
-                    if (map.containsKey(name))
-                        new ServerSend(map.get(name), line, "6");
-                    else
-                        new ServerSend(socket, "", "7");
+                } else if (info.equals("10")) {
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+
+                    Object[] obj = new Object[] { Dashboard.jobsModel.getRowCount() + 1, path,
+                            dateFormat.format(date), "Created",
+                            line,
+                            name };
+
+                    String data = "{" + (Dashboard.jobsModel.getRowCount() + 1) + ","
+                            + path + "," +
+                            dateFormat.format(date).toString() + "," + "Created" + "," +
+                            line + "," +
+                            name + "}";
+
+                    WriteFile wr = new WriteFile();
+                    wr.writeFile(String.valueOf(data), Dashboard.pathDirectory);
+                    Dashboard.jobsModel.addRow(obj);
+                    Dashboard.jtable.setModel(Dashboard.jobsModel);
+
+                } else if (info.equals("11")) {
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+
+                    Object[] obj = new Object[] { Dashboard.jobsModel.getRowCount() + 1, path,
+                            dateFormat.format(date), "Deleted",
+                            line,
+                            name };
+
+                    String data = "{" + (Dashboard.jobsModel.getRowCount() + 1) + ","
+                            + path + "," +
+                            dateFormat.format(date).toString() + "," + "Deleted" + "," +
+                            line + "," +
+                            name + "}";
+
+                    WriteFile wr = new WriteFile();
+                    wr.writeFile(String.valueOf(data), Dashboard.pathDirectory);
+                    Dashboard.jobsModel.addRow(obj);
+                    Dashboard.jtable.setModel(Dashboard.jobsModel);
+
+                } else if (info.equals("12")) {
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+
+                    Object[] obj = new Object[] { Dashboard.jobsModel.getRowCount() + 1, path,
+                            dateFormat.format(date), "Modified",
+                            line,
+                            name };
+
+                    String data = "{" + (Dashboard.jobsModel.getRowCount() + 1) + ","
+                            + path + "," +
+                            dateFormat.format(date).toString() + "," + "Modified" + "," +
+                            line + "," +
+                            name + "}";
+
+                    WriteFile wr = new WriteFile();
+                    wr.writeFile(String.valueOf(data), Dashboard.pathDirectory);
+                    Dashboard.jobsModel.addRow(obj);
+                    Dashboard.jtable.setModel(Dashboard.jobsModel);
                 }
             }
         } catch (IOException e) {

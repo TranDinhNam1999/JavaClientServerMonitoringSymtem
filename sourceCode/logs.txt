@@ -1,0 +1,22 @@
+{1,D:\HOCTAP\HOCLAI,2022/08/21 18:21:08,Connected,pppp,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/21 18:21:18,Created,pppp,A new file is created : pppp}
+{3,D:\HOCTAP\HOCLAI,2022/08/21 18:22:45,Disconnected,pppp,Disconnected}
+{1,D:\HOCTAP\HOCLAI,2022/08/21 18:30:12,Connected,dinhnam,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/21 18:30:12,Created,dinhnam,A new file is created : dinhnam}
+{3,D:\HOCTAP\HOCLAI,2022/08/21 18:30:25,Connected,dinhhai,Connected}
+{4,D:\HOCTAP\HOCLAI,2022/08/21 18:30:25,Created,dinhhai,A new file is created : dinhhai}
+{4,D:\HOCTAP\HOCLAI,2022/08/21 18:30:25,Created,dinhnam,A new file is created : dinhhai}
+{6,D:\HOCTAP\HOCLAI,2022/08/21 18:30:45,Modified,dinhnam,A file has been modified : aaaaa}
+{6,D:\HOCTAP\HOCLAI,2022/08/21 18:30:45,Modified,dinhhai,A file has been modified : aaaaa}
+{8,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:19,Created,dinhhai,A new file is created : New Text Document.txt}
+{9,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:19,Created,dinhhai,A new file is created : dinhhai}
+{10,D:\HOCTAP\HOCLAI,2022/08/21 18:31:19,Modified,dinhnam,A file has been modified : aaaaa}
+{11,D:\HOCTAP\HOCLAI,2022/08/21 18:31:25,Modified,dinhnam,A file has been modified : aaaaa}
+{12,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:25,Deleted,dinhhai,A file has been deleted : New Text Document.txt}
+{13,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:25,Created,dinhhai,A new file is created : aaaaaa.txt}
+{14,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:53,Modified,dinhhai,A file has been modified : dinhhai}
+{15,D:\HOCTAP\HOCLAI,2022/08/21 18:32:27,Deleted,dinhnam,A file has been deleted : hai}
+{16,D:\HOCTAP\HOCLAI,2022/08/21 18:32:33,Disconnected,dinhnam,Disconnected}
+{17,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:32:34,Disconnected,dinhhai,Disconnected}
+{1,D:\HOCTAP\HOCLAI,2022/08/21 18:52:11,Connected,aaaaaaaa,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/21 18:52:12,Created,aaaaaaaa,A new file is created : aaaaaaaa}

@@ -1,24 +1,42 @@
 package Server;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.Console;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
 import java.awt.event.ActionListener;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 public class Dashboard {
     public static JFrame window;
-    public static JTextArea console;
     public static JList<String> user;
     public static String address;
+    public static DefaultTableModel jobsModel;
+    public static JTable jtable;
+    public static String pathDirectory = "D:\\HOCTAP\\HOCLAI\\LOGS\\";
 
-    public JButton disconec;
-    public JTextField message;
+    public JButton disconec, btnSearch, btnLoadLogs;
+    public JTextField message, jtf;
     public JLabel jip;
     public JLabel jport;
 
@@ -36,12 +54,12 @@ public class Dashboard {
                     Serverhandler.flag = true;
                     address = InetAddress.getLocalHost().getHostAddress();
                     new Thread(new Serverhandler(port)).start();
+                    pathDirectory = Paths.get(".").normalize().toAbsolutePath().toString();
                 } catch (IOException e1) {
                     JOptionPane.showMessageDialog(window, "Cannot start server");
                 }
             }
         }
-
         init(port);
     }
 
@@ -49,7 +67,7 @@ public class Dashboard {
         window = new JFrame("Monitoring system");
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLayout(null);
-        window.setBounds(200, 200, 500, 350);
+        window.setBounds(200, 200, 1200, 480);
         window.setResizable(false);
 
         JLabel labelnomeServidor = new JLabel("IP:");
@@ -68,28 +86,37 @@ public class Dashboard {
         jport.setBounds(200, 8, 70, 30);
         window.add(jport);
 
-        console = new JTextArea();
-        console.setBounds(10, 70, 340, 320);
-        console.setEditable(false); // não pode ser editado
-
-        console.setLineWrap(true); // automatic content line feed
-        console.setWrapStyleWord(true);
-
-        JLabel label_text = new JLabel("Logs");
-        label_text.setBounds(10, 47, 190, 30);
+        JLabel label_text = new JLabel("List client");
+        label_text.setBounds(10, 80, 100, 30);
         window.add(label_text);
 
-        JScrollPane paneText = new JScrollPane(console);
-        paneText.setBounds(10, 70, 340, 220);
-        window.add(paneText);
+        btnSearch = new JButton("Search");
+        btnSearch.setBounds(530, 70, 150, 30);
+        window.add(btnSearch);
 
-        JLabel label_listaUsuario = new JLabel("List client");
-        label_listaUsuario.setBounds(357, 47, 180, 30);
-        window.add(label_listaUsuario);
+        jtf = new JTextField("");
+        jtf.setBounds(147, 70, 380, 30);
+        window.add(jtf);
+
+        btnLoadLogs = new JButton("Load Logs");
+        btnLoadLogs.setBounds(1071, 70, 100, 30);
+        window.add(btnLoadLogs);
 
         user = new JList<String>();
         JScrollPane paneUser = new JScrollPane(user);
-        paneUser.setBounds(355, 70, 130, 220);
+        paneUser.setBounds(10, 110, 130, 320);
+
+        user.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (!event.getValueIsAdjusting()) {
+                    JList source = (JList) event.getSource();
+                    String selected = source.getSelectedValue().toString();
+
+                    System.out.println(selected);
+                }
+            }
+        });
+
         window.add(paneUser);
 
         message = new JTextField();
@@ -100,8 +127,94 @@ public class Dashboard {
         disconec.setBounds(0, 0, 0, 0);
         window.add(disconec);
 
+        jobsModel = new DefaultTableModel(
+                new String[] { "STT", "Monitoring directory", "Time", "Action", "Name Client", "Description" }, 0) {
+            public Class getColumnClass(int column) {
+                Class returnValue;
+                if ((column >= 0) && (column < getColumnCount())) {
+                    returnValue = getValueAt(0, column).getClass();
+                } else {
+                    returnValue = Object.class;
+                }
+                return returnValue;
+            }
+        };
+
+        jtable = new JTable();
+        jtable.setModel(jobsModel);
+        jtable.setAutoCreateRowSorter(true);
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(jobsModel);
+        jtable.setRowSorter(sorter);
+        jtable.setBounds(145, 110, 1030, 320);
+
+        TableColumnModel columnModel = jtable.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(20);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(100);
+        columnModel.getColumn(3).setPreferredWidth(100);
+        columnModel.getColumn(4).setPreferredWidth(100);
+        columnModel.getColumn(5).setPreferredWidth(400);
+        // adding it to JScrollPane
+        JScrollPane sp = new JScrollPane(jtable);
+        sp.setBounds(145, 110, 1030, 320);
+        window.add(sp);
+
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String text = jtf.getText();
+                if (text.length() == 0) {
+                    sorter.setRowFilter(null);
+                } else {
+                    sorter.setRowFilter(RowFilter.regexFilter(text));
+                }
+            }
+        });
+
         myEvent();
         window.setVisible(true);
+    }
+
+    public void writeFile(String value) {
+        String PATH = pathDirectory;
+        String directoryName = PATH;
+        String fileName = "logs.txt";
+
+        File directory = new File(directoryName);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(directoryName + "\\" + fileName + "\\", true);
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
+            bufferedWriter.append(value + "\r\n");
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readFile(String path) {
+        try {
+            Scanner scan = new Scanner(new File(path), "UTF-8");
+            while (scan.hasNext()) {
+                String data1 = scan.nextLine();
+                String data2 = data1.replaceAll("\\{", "");
+                String data3 = data2.replaceAll("\\}", "");
+                String[] arrOfStr = data3.split(",", -2);
+                Object[] obj = new Object[] { jobsModel.getRowCount() + 1,
+                        arrOfStr[1],
+                        arrOfStr[2], arrOfStr[3],
+                        arrOfStr[4],
+                        arrOfStr[5] };
+
+                jobsModel.addRow(obj);
+            }
+            jtable.setModel(jobsModel);
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     public void myEvent() {
@@ -114,7 +227,23 @@ public class Dashboard {
                         e1.printStackTrace();
                     }
                 }
-                System.exit(0); // sair da janela
+                System.exit(0);
+            }
+        });
+
+        btnLoadLogs.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                JFileChooser myfileChooser = new JFileChooser();
+                myfileChooser.setDialogTitle("select file");
+                if (Files.isDirectory(Paths.get(pathDirectory))) {
+                    myfileChooser.setCurrentDirectory(new File(pathDirectory));
+                }
+                int findresult = myfileChooser.showOpenDialog(window);
+                if (findresult == myfileChooser.APPROVE_OPTION) {
+                    String path = myfileChooser.getCurrentDirectory().getPath() + "\\logs.txt";
+                    readFile(path);
+                }
             }
         });
 
@@ -142,59 +271,5 @@ public class Dashboard {
                 }
             }
         });
-
-        // inicia.addActionListener(new ActionListener() {
-        // public void actionPerformed(ActionEvent e) {
-        // if (Servidor.ss != null && !Servidor.ss.isClosed()) {
-        // JOptionPane.showMessageDialog(window, "O servidor foi iniciado!");
-        // } else {
-        // ports = getPorta();
-        // if (ports != 0) {
-        // try {
-        // Servidor.flag = true;
-        // new Thread(new Servidor(ports)).start(); // inicia servidor thread
-        // inicia.setText("Iniciado");
-        // sair.setText("Fechar");
-        // } catch (IOException e1) {
-        // JOptionPane.showMessageDialog(window, "Falha ao rodar");
-        // }
-        // }
-        // }
-        // }
-        // });
-
-        message.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    enviarMsg();
-                }
-            }
-        });
-
-        // enviar.addActionListener(new ActionListener() {
-        // public void actionPerformed(ActionEvent e) {
-        // enviarMsg();
-        // }
-        // });
     }
-
-    public void enviarMsg() {
-        String messages = message.getText();
-        if ("".equals(messages)) {
-            JOptionPane.showMessageDialog(window, "Não há nada para enviar!");
-        } else if (Serverhandler.listaClient == null || Serverhandler.listaClient.size() == 0) {
-            JOptionPane.showMessageDialog(window, "Não há conexão!");
-        } else {
-            try {
-                new ServerSend(Serverhandler.listaClient, "Server: " + messages, "1", "");
-                message.setText(null);
-            } catch (IOException e1) {
-                JOptionPane.showMessageDialog(window, "Falha ao enviar!");
-            }
-        }
-    }
-
-    // public String getnomeServidor() {
-    // return nomeServidor.getText();
-    // }
 }

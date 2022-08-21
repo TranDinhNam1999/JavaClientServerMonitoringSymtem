@@ -47,8 +47,7 @@ public class ClientReceive implements Runnable {
                                 ClientHandler.nameClient + "," +
                                 "(Notification) " + ClientHandler.nameClient + " connected to server!" + "}";
 
-                        ClientHandler.jobsModel.addRow(
-                                obj);
+                        ClientHandler.jobsModel.addRow(obj);
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
                         WriteFile wr = new WriteFile();
                         wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
@@ -68,16 +67,13 @@ public class ClientReceive implements Runnable {
                                 ClientHandler.nameClient + "," +
                                 "(Notification) " + ClientHandler.nameClient + " disconnected to server!" + "}";
 
-                        ClientHandler.jobsModel.addRow(
-                                obj);
+                        ClientHandler.jobsModel.addRow(obj);
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
                         WriteFile wr = new WriteFile();
                         wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
                     }
                     String list = line.substring(1, line.length() - 1);
                     String[] data = list.split(",");
-                    ClientHandler.user.clearSelection();
-                    ClientHandler.user.setListData(data);
                 } else if (info.equals("4")) {
                     ClientHandler.connect.setText("Log-in");
                     ClientHandler.socket.close();

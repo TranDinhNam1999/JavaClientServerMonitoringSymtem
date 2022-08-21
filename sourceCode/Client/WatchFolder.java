@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
@@ -11,6 +12,11 @@ import java.util.Date;
 
 public class WatchFolder implements Runnable {
     public static WatchService watchService;
+    private Socket s;
+
+    public WatchFolder(Socket s) {
+        this.s = s;
+    }
 
     public void dispose() throws IOException {
         watchService.close();
@@ -63,6 +69,8 @@ public class WatchFolder implements Runnable {
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
                         WriteFile wr = new WriteFile();
                         wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
+                        new ClientSend(s, ClientHandler.nameClient, "10", "A new file is created : " + fileName,
+                                ClientHandler.pathDirectory);
                     }
 
                     if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
@@ -87,6 +95,8 @@ public class WatchFolder implements Runnable {
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
                         WriteFile wr = new WriteFile();
                         wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
+                        new ClientSend(s, ClientHandler.nameClient, "11", "A file has been deleted : " + fileName,
+                                ClientHandler.pathDirectory);
                     }
                     if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
 
@@ -109,6 +119,8 @@ public class WatchFolder implements Runnable {
                         ClientHandler.jtable.setModel(ClientHandler.jobsModel);
                         WriteFile wr = new WriteFile();
                         wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
+                        new ClientSend(s, ClientHandler.nameClient, "12", "A file has been modified : " + fileName,
+                                ClientHandler.pathDirectory);
                     }
 
                 }
