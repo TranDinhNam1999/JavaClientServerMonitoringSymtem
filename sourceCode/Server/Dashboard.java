@@ -9,8 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -19,6 +22,9 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -30,6 +36,8 @@ import javax.swing.table.TableRowSorter;
 public class Dashboard {
     public static JFrame window;
     public static JList<String> user;
+    public static Map<String, String> mapPath = new HashMap<String, String>();
+    public static Map<String, Socket> map = new HashMap<String, Socket>();;
     public static String address;
     public static DefaultTableModel jobsModel;
     public static JTable jtable;
@@ -112,6 +120,40 @@ public class Dashboard {
                     JList source = (JList) event.getSource();
                     String selected = source.getSelectedValue().toString();
 
+                    JFileChooser myfileChooser = new JFileChooser();
+                    myfileChooser.setDialogTitle("select folder");
+                    if (Files.isDirectory(Paths.get(mapPath.get(selected)))) {
+                        myfileChooser.setCurrentDirectory(new File(mapPath.get(selected)));
+                    }
+                    int findresult = myfileChooser.showOpenDialog(window);
+                    if (findresult == myfileChooser.APPROVE_OPTION) {
+                        String pathClient = myfileChooser.getCurrentDirectory().getAbsolutePath();
+                        try {
+                            new ServerSend(map.get(selected), pathClient, "13", "Server");
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Date date = new Date();
+
+                            Object[] obj = new Object[] { jobsModel.getRowCount() + 1, pathClient,
+                                    dateFormat.format(date), "Change path",
+                                    selected,
+                                    "Change path monitoring systtem" };
+
+                            String data = "{" + (jobsModel.getRowCount() + 1) + ","
+                                    + pathClient + "," +
+                                    dateFormat.format(date).toString() + "," + "Change path" + "," +
+                                    selected + "," +
+                                    "Change path monitoring systtem" + "}";
+
+                            WriteFile wr = new WriteFile();
+                            wr.writeFile(String.valueOf(data), pathDirectory);
+                            jobsModel.addRow(obj);
+                            jtable.setModel(jobsModel);
+
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+
+                    }
                     System.out.println(selected);
                 }
             }
@@ -222,7 +264,7 @@ public class Dashboard {
             public void windowClosing(WindowEvent e) {
                 if (Serverhandler.listaClient != null && Serverhandler.listaClient.size() != 0) {
                     try {
-                        new ServerSend(Serverhandler.listaClient, "", "5", "");
+                        new ServerSend(Serverhandler.listaClient, "Server die", "5", "Server");
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }

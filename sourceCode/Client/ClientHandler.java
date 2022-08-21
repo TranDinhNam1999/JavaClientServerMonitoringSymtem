@@ -29,11 +29,11 @@ public class ClientHandler {
     public static Socket socket = null;
     public static String nameClient = "Client";
     public static DefaultTableModel jobsModel;
-    public static String pathDirectory = "D:\\HOCTAP\\HOCLAI";
+    public static String pathDirectory = "D:\\HOCTAP\\HOCLAI\\";
 
     String globalId;
     int globalPort;
-    JLabel labelPath;
+    public static JLabel labelPath;
     JTextField textIp, textPort;
     JTextField jtf;
     JButton msgPrivada, enviar, btnbrowse, btnLoadLogs, btnSearch;
@@ -108,10 +108,6 @@ public class ClientHandler {
         btnLoadLogs = new JButton("Load Logs");
         btnLoadLogs.setBounds(1050, 80, 100, 30);
         window.add(btnLoadLogs);
-
-        // jobsModel = new DefaultTableModel(
-        // new String[] { "STT", "Monitoring directory", "Time", "Action", "Name
-        // Client", "Description" }, 0);
 
         jobsModel = new DefaultTableModel(
                 new String[] { "STT", "Monitoring directory", "Time", "Action", "Name Client", "Description" }, 0) {
@@ -263,7 +259,7 @@ public class ClientHandler {
                         globalId = textIp.getText();
                         globalPort = Integer.parseInt(textPort.getText());
                         socket = new Socket(globalId, globalPort);
-                        connect.setText("Connected");
+                        connect.setText("Disconnec");
 
                         new ClientSend(socket, getnomeUsuario(), "2", "Connected", pathDirectory);
                         new Thread(new ClientReceive(socket)).start();
@@ -273,7 +269,7 @@ public class ClientHandler {
                         Date date = new Date();
 
                         Object[] obj = new Object[] { jobsModel.getRowCount() + 1, pathDirectory,
-                                dateFormat.format(date), "Disconnected",
+                                dateFormat.format(date), "Connected",
                                 nameClient,
                                 "(Notification) " + nameClient + " connected to server!" };
 
@@ -293,7 +289,7 @@ public class ClientHandler {
                 } else if (socket != null && socket.isConnected()) {
                     try {
                         new ClientSend(socket, getnomeUsuario(), "3", "Disconnected", pathDirectory);
-                        connect.setText("Disconnect");
+                        connect.setText("Connect");
                         WatchFolder.watchService.close();
                         socket.close();
                         socket = null;

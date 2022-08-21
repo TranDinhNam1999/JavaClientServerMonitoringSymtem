@@ -15,8 +15,8 @@ public class ServerSend {
         }
     }
 
-    ServerSend(Socket s, Object message, String info) throws IOException {
-        String messages = info + "." + message;
+    ServerSend(Socket s, Object message, String info, String name) throws IOException {
+        String messages = info + "." + message + "." + name;
         PrintWriter pwOut = new PrintWriter(s.getOutputStream(), true);
         pwOut.println(messages);
     }

@@ -8,27 +8,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ClientReceive implements Runnable {
-    private Socket s;
+    private Socket socket;
 
-    public ClientReceive(Socket s) {
-        this.s = s;
+    public ClientReceive(Socket socket) {
+        this.socket = socket;
     }
 
     public void run() {
         try {
-            BufferedReader brIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            BufferedReader brIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Thread.sleep(500);
             while (true) {
                 String s = brIn.readLine();
                 String[] strs = s.split("\\.");
                 String info = strs[0];
-                String name = "", line = "";
-                if (strs.length == 2)
-                    line = strs[1];
-                else if (strs.length == 3) {
-                    line = strs[1];
-                    name = strs[2];
-                }
+                String name = strs[2], line = strs[1];
                 if (info.equals("1")) {
                 } else if (info.equals("2") || info.equals("3")) {
                     if (info.equals("2")) {
@@ -39,7 +33,7 @@ public class ClientReceive implements Runnable {
                                 ClientHandler.pathDirectory,
                                 dateFormat.format(date), "Connected",
                                 ClientHandler.nameClient,
-                                "(Thông báo) " + ClientHandler.nameClient + " connected to server!" };
+                                "(Notification) " + ClientHandler.nameClient + " connected to server!" };
 
                         String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
                                 + ClientHandler.pathDirectory + "," +
@@ -59,7 +53,7 @@ public class ClientReceive implements Runnable {
                                 ClientHandler.pathDirectory,
                                 dateFormat.format(date), "Disconnected",
                                 ClientHandler.nameClient,
-                                "(Thông báo) " + ClientHandler.nameClient + " disconnected to server!" };
+                                "(Notification)" + ClientHandler.nameClient + " disconnected to server!" };
 
                         String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
                                 + ClientHandler.pathDirectory + "," +
@@ -72,17 +66,65 @@ public class ClientReceive implements Runnable {
                         WriteFile wr = new WriteFile();
                         wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
                     }
-                    String list = line.substring(1, line.length() - 1);
-                    String[] data = list.split(",");
                 } else if (info.equals("4")) {
                     ClientHandler.connect.setText("Log-in");
                     ClientHandler.socket.close();
                     ClientHandler.socket = null;
                     JOptionPane.showMessageDialog(ClientHandler.window, "Someone used this username!!!");
                     break;
-                } else if (info.equals("5")) {
+                } else if (info.equals("13")) {
+                    ClientHandler.pathDirectory = line + "\\";
+                    ClientHandler.labelPath.setText("Path: " + line);
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+
+                    Object[] obj = new Object[] { ClientHandler.jobsModel.getRowCount() + 1,
+                            ClientHandler.pathDirectory,
+                            dateFormat.format(date), "Change path",
+                            ClientHandler.nameClient,
+                            "(Notification) Server send change path" };
+
+                    String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
+                            + ClientHandler.pathDirectory + "," +
+                            dateFormat.format(date).toString() + "," + "Change path" + "," +
+                            ClientHandler.nameClient + "," +
+                            "(Notification) Server send change path" + "}";
+
+                    ClientHandler.jobsModel.addRow(obj);
+                    ClientHandler.jtable.setModel(ClientHandler.jobsModel);
+                    WriteFile wr = new WriteFile();
+                    wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
+
+                    WatchFolder.watchService.close();
+                    new Thread(new WatchFolder(this.socket)).start();
+
                     break;
-                } else if (info.equals("6")) {
+                } else if (info.equals("5")) {
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+
+                    Object[] obj = new Object[] { ClientHandler.jobsModel.getRowCount() + 1,
+                            ClientHandler.pathDirectory,
+                            dateFormat.format(date), "Server die",
+                            ClientHandler.nameClient,
+                            "(Notification) Server has been die" };
+
+                    String data = "{" + (ClientHandler.jobsModel.getRowCount() + 1) + ","
+                            + ClientHandler.pathDirectory + "," +
+                            dateFormat.format(date).toString() + "," + "Server die" + "," +
+                            ClientHandler.nameClient + "," +
+                            "(Notification) Server has been die" + "}";
+
+                    ClientHandler.jobsModel.addRow(obj);
+                    ClientHandler.jtable.setModel(ClientHandler.jobsModel);
+                    WriteFile wr = new WriteFile();
+                    wr.writeFile(String.valueOf(data), ClientHandler.pathDirectory, ClientHandler.nameClient);
+                    ClientHandler.connect.setText("Connect");
+                    JOptionPane.showMessageDialog(ClientHandler.window, "Server disconnect, please connect againt");
+                    WatchFolder.watchService.close();
+                    ClientHandler.socket.close();
+                    ClientHandler.socket = null;
                     break;
                 }
             }

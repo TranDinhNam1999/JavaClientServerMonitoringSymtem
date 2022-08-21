@@ -41,7 +41,8 @@ public class ServerReceive implements Runnable {
                 } else if (info.equals("2")) { // 2 para login
                     if (!nameClient.contains(line)) {
                         nameClient.add(line);
-                        map.put(line, socket);
+                        Dashboard.map.put(line, socket);
+                        Dashboard.mapPath.put(line, path);
                         Dashboard.user.setListData(nameClient);
                         new ServerSend(listClient, name, "2", line);
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -64,7 +65,7 @@ public class ServerReceive implements Runnable {
                         Dashboard.jtable.setModel(Dashboard.jobsModel);
                     } else {
                         listClient.remove(socket);
-                        new ServerSend(socket, "", "4");
+                        new ServerSend(socket, "", "4", "server");
                     }
                 } else if (info.equals("3")) {
 
@@ -89,7 +90,8 @@ public class ServerReceive implements Runnable {
 
                     nameClient.remove(line);
                     listClient.remove(socket);
-                    map.remove(line);
+                    Dashboard.map.remove(line);
+                    Dashboard.mapPath.remove(line);
                     Dashboard.user.setListData(nameClient);
                     new ServerSend(listClient, nameClient, "3", line);
                     socket.close();
