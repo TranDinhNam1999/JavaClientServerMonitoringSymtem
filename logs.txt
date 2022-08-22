@@ -1,0 +1,91 @@
+{1,D:\HOCTAP\HOCLAI,2022/08/21 18:21:08,Connected,pppp,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/21 18:21:18,Created,pppp,A new file is created : pppp}
+{3,D:\HOCTAP\HOCLAI,2022/08/21 18:22:45,Disconnected,pppp,Disconnected}
+{1,D:\HOCTAP\HOCLAI,2022/08/21 18:30:12,Connected,dinhnam,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/21 18:30:12,Created,dinhnam,A new file is created : dinhnam}
+{3,D:\HOCTAP\HOCLAI,2022/08/21 18:30:25,Connected,dinhhai,Connected}
+{4,D:\HOCTAP\HOCLAI,2022/08/21 18:30:25,Created,dinhhai,A new file is created : dinhhai}
+{4,D:\HOCTAP\HOCLAI,2022/08/21 18:30:25,Created,dinhnam,A new file is created : dinhhai}
+{6,D:\HOCTAP\HOCLAI,2022/08/21 18:30:45,Modified,dinhnam,A file has been modified : aaaaa}
+{6,D:\HOCTAP\HOCLAI,2022/08/21 18:30:45,Modified,dinhhai,A file has been modified : aaaaa}
+{8,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:19,Created,dinhhai,A new file is created : New Text Document.txt}
+{9,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:19,Created,dinhhai,A new file is created : dinhhai}
+{10,D:\HOCTAP\HOCLAI,2022/08/21 18:31:19,Modified,dinhnam,A file has been modified : aaaaa}
+{11,D:\HOCTAP\HOCLAI,2022/08/21 18:31:25,Modified,dinhnam,A file has been modified : aaaaa}
+{12,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:25,Deleted,dinhhai,A file has been deleted : New Text Document.txt}
+{13,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:25,Created,dinhhai,A new file is created : aaaaaa.txt}
+{14,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:31:53,Modified,dinhhai,A file has been modified : dinhhai}
+{15,D:\HOCTAP\HOCLAI,2022/08/21 18:32:27,Deleted,dinhnam,A file has been deleted : hai}
+{16,D:\HOCTAP\HOCLAI,2022/08/21 18:32:33,Disconnected,dinhnam,Disconnected}
+{17,D:\HOCTAP\HOCLAI\aaaaa,2022/08/21 18:32:34,Disconnected,dinhhai,Disconnected}
+{1,D:\HOCTAP\HOCLAI,2022/08/21 18:52:11,Connected,aaaaaaaa,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/21 18:52:12,Created,aaaaaaaa,A new file is created : aaaaaaaa}
+{1,D:\HOCTAP\HOCLAI,2022/08/21 23:58:53,Connected,123213,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/21 23:58:53,Created,123213,A new file is created : 123213}
+{1,D:\HOCTAP\HOCLAI,2022/08/22 00:24:09,Connected,nam,Connected}
+{2,D:\HOCTAP\HOCLAI,2022/08/22 00:24:40,Disconnected,nam,Disconnected}
+{3,D:\HOCTAP\HOCLAI,2022/08/22 00:24:46,Connected,nam,Connected}
+{4,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:25:26,Change path,nam,Change path monitoring systtem}
+{1,D:\HOCTAP\HOCLAI\,2022/08/22 00:31:11,Connected,uida,Connected}
+{2,D:\HOCTAP\HOCLAI\,2022/08/22 00:31:11,Created,uida,A new file is created : uida}
+{3,D:\HOCTAP\HOCLAI\,2022/08/22 00:31:30,Connected,hehe,Connected}
+{4,D:\HOCTAP\HOCLAI\,2022/08/22 00:31:31,Created,uida,A new file is created : hehe}
+{4,D:\HOCTAP\HOCLAI\,2022/08/22 00:31:31,Created,hehe,A new file is created : hehe}
+{6,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:31:42,Change path,uida,Change path monitoring systtem}
+{7,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:10,Modified,hehe,A file has been modified : namhandsome}
+{7,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:10,Modified,uida,A file has been modified : namhandsome}
+{9,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:13,Modified,uida,A file has been modified : namhandsome}
+{9,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:13,Modified,hehe,A file has been modified : namhandsome}
+{11,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:13,Modified,hehe,A file has been modified : namhandsome}
+{12,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:13,Modified,uida,A file has been modified : namhandsome}
+{13,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:17,Modified,uida,A file has been modified : namhandsome}
+{13,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:17,Modified,hehe,A file has been modified : namhandsome}
+{15,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:17,Modified,uida,A file has been modified : namhandsome}
+{16,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:17,Modified,hehe,A file has been modified : namhandsome}
+{17,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:22,Modified,uida,A file has been modified : namhandsome}
+{17,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:22,Modified,hehe,A file has been modified : namhandsome}
+{19,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:38,Modified,uida,A file has been modified : namhandsome}
+{20,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:38,Modified,uida,A file has been modified : namhandsome}
+{19,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:38,Modified,hehe,A file has been modified : namhandsome}
+{22,D:\HOCTAP\HOCLAI\,2022/08/22 00:32:38,Modified,hehe,A file has been modified : namhandsome}
+{23,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:32:54,Disconnected,uida,Disconnected}
+{24,D:\HOCTAP\HOCLAI\,2022/08/22 00:33:34,Connected,ssssss,Connected}
+{25,D:\HOCTAP\HOCLAI\,2022/08/22 00:33:34,Created,ssssss,A new file is created : ssssss}
+{26,D:\HOCTAP\HOCLAI\,2022/08/22 00:33:34,Created,hehe,A new file is created : ssssss}
+{27,D:\HOCTAP\CCKCPM,2022/08/22 00:34:14,Change path,ssssss,Change path monitoring systtem}
+{28,D:\HOCTAP\CCKCPM,2022/08/22 00:34:32,Modified,ssssss,A file has been modified : hehe}
+{29,D:\HOCTAP\CCKCPM,2022/08/22 00:34:32,Modified,ssssss,A file has been modified : HQTCSDL}
+{30,D:\HOCTAP\HOCLAI\,2022/08/22 00:34:32,Modified,hehe,A file has been modified : hehe}
+{31,D:\HOCTAP\HOCLAI\,2022/08/22 00:34:32,Modified,hehe,A file has been modified : HQTCSDL}
+{32,D:\HOCTAP\HOCLAI\,2022/08/22 00:34:32,Modified,hehe,A file has been modified : ssssss}
+{32,D:\HOCTAP\CCKCPM,2022/08/22 00:34:32,Modified,ssssss,A file has been modified : ssssss}
+{34,D:\HOCTAP\HOCLAI\,2022/08/22 00:34:32,Modified,hehe,A file has been modified : uida}
+{35,D:\HOCTAP\CCKCPM,2022/08/22 00:34:32,Modified,ssssss,A file has been modified : uida}
+{36,D:\HOCTAP\HOCLAI\,2022/08/22 00:35:12,Disconnected,hehe,Disconnected}
+{37,D:\HOCTAP\CCKCPM,2022/08/22 00:35:13,Disconnected,ssssss,Disconnected}
+{1,D:\HOCTAP\HOCLAI\,2022/08/22 00:43:07,Connected,gg,Connected}
+{2,D:\HOCTAP\HOCLAI\,2022/08/22 00:43:07,Created,gg,A new file is created : gg}
+{3,D:\HOCTAP\HOCLAI\,2022/08/22 00:43:23,Connected,goodnight,Connected}
+{4,D:\HOCTAP\HOCLAI\,2022/08/22 00:43:23,Created,goodnight,A new file is created : goodnight}
+{5,D:\HOCTAP\HOCLAI\,2022/08/22 00:43:23,Created,gg,A new file is created : goodnight}
+{6,D:\HOCTAP\HOCLAI\namhandsome,2022/08/22 00:43:59,Change path,goodnight,Change path monitoring systtem}
+{7,D:\HOCTAP\HOCLAI\,2022/08/22 00:44:14,Modified,gg,A file has been modified : namhandsome}
+{8,D:\HOCTAP\HOCLAI\namhandsome\,2022/08/22 00:44:17,Deleted,goodnight,A file has been deleted : uida}
+{9,D:\HOCTAP\HOCLAI\,2022/08/22 00:44:17,Modified,gg,A file has been modified : namhandsome}
+{10,D:\HOCTAP\abcxyz,2022/08/22 00:45:01,Change path,goodnight,Change path monitoring systtem}
+{11,D:\HOCTAP\BT03,2022/08/22 00:45:21,Change path,gg,Change path monitoring systtem}
+{12,D:\HOCTAP\BT03\,2022/08/22 00:45:51,Created,gg,A new file is created : New Text Document.txt}
+{13,D:\HOCTAP\BT03\,2022/08/22 00:45:53,Deleted,gg,A file has been deleted : New Text Document.txt}
+{14,D:\HOCTAP\BT03\,2022/08/22 00:45:53,Created,gg,A new file is created : ffff.txt}
+{15,D:\HOCTAP\BT03\,2022/08/22 00:47:04,Disconnected,gg,Disconnected}
+{16,D:\HOCTAP\BT03\,2022/08/22 00:47:08,Connected,gg,Connected}
+{17,D:\HOCTAP\BT03\,2022/08/22 00:47:28,Disconnected,gg,Disconnected}
+{18,D:\HOCTAP\BT03\,2022/08/22 00:47:38,Connected,gg,Connected}
+{19,D:\HOCTAP\BT03\,2022/08/22 00:48:30,Disconnected,gg,Disconnected}
+{20,D:\HOCTAP\HOCLAI\namhandsome\,2022/08/22 00:48:32,Disconnected,goodnight,Disconnected}
+{1,D:\HOCTAP\HOCLAI\,2022/08/22 00:59:21,Connected,the last,Connected}
+{2,D:\HOCTAP\HOCLAI\,2022/08/22 00:59:21,Created,the last,A new file is created : the last}
+{1,D:\HOCTAP\HOCLAI\,2022/08/22 01:02:20,Connected,eeeeeee,Connected}
+{2,D:\HOCTAP\HOCLAI\,2022/08/22 01:02:20,Created,eeeeeee,A new file is created : eeeeeee}
+{1,D:\HOCTAP\HOCLAI\,2022/08/22 01:04:27,Connected,wwwwww,Connected}
+{2,D:\HOCTAP\HOCLAI\,2022/08/22 01:04:28,Created,wwwwww,A new file is created : wwwwww}

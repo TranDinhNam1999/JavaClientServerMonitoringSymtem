@@ -1,5 +1,8 @@
-package Server;
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.servermonitoringsystem;
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,7 +34,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
+/**
+ *
+ * @author namtd
+ */
 public class Dashboard {
     public static JFrame window;
     public static JList<String> user;

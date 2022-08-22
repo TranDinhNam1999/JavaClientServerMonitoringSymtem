@@ -1,0 +1,14 @@
+1. Start server, server hiện thị ip, port cho các client kết nối vào (5đ) - Hoàn thành
+2. Client kết nối vào server theo ip, port, name, nếu lỗi thông báo và kết nối lại (5đ) - Hoàn thành
+3. Server xem được danh sách các client đang kết nối (5đ) - Hoàn thành
+4. Server mạc định giám sát 1 thư mục mặc định trên máy client (5đ) - Hoàn thành
+5. Người quản lí server có thể browse để xem danh sách cây thư mục từ đường dẫn mặc định trên máy client
+và chọn thay đổi sang 1 folder khác để giám sát, hành động này có ghi logs lại (10đ) - Hoàn thành
+6. Giám sát và ghi logs các folder đang theo dõi ở client, connect, disconnect, change path, 
+hiện thị lên table, có tìm kiếm, filter (30đ) - Hoàn thành
+7. Các thao tác ở phía client được ghi logs lại và được hiện thị giống ở server (10đ) - Hoàn thành
+8. Server ghi logs vào file và load lại xem logs cũ khi cần (20đ) - Hoàn thành
+9. Client ghi logs vào file và load lại xem logs cũ khi cần (10đ) - Hoàn thành
+-- Tổng điểm các chức năng hoàn thành: 100đ
+
+Link youtube demo đồ án:
