@@ -1,0 +1,2 @@
+{4,D:\HOCTAP\HOCLAI\java\JavaClientServerMonitoringSymtem\ClientMonitoringSystem\src\main\,2022/08/23 20:48:16,Change path,aaa,(Notification) Server send change path}
+{5,D:\HOCTAP\HOCLAI\java\JavaClientServerMonitoringSymtem\ClientMonitoringSystem\src\main\,2022/08/23 20:48:16,Modified,aaa,A file has been modified : aaa}

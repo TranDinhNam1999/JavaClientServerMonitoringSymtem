@@ -1,0 +1,3 @@
+{1,D:\HOCTAP\HOCLAI\java\JavaClientServerMonitoringSymtem\ClientMonitoringSystem\,2022/08/23 20:47:54,Connected,aaa,(Notification) aaa connected to server!}
+{2,D:\HOCTAP\HOCLAI\java\JavaClientServerMonitoringSymtem\ClientMonitoringSystem\,2022/08/23 20:47:54,Created,aaa,A new file is created : aaa}
+{3,D:\HOCTAP\HOCLAI\java\JavaClientServerMonitoringSymtem\ClientMonitoringSystem\,2022/08/23 20:47:54,Modified,aaa,A file has been modified : aaa}
